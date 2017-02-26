@@ -1,84 +1,73 @@
-$(function() {
+$(document).ready(function () {
+    $.ajax({
+        url: "/products", success: function (products) {
 
+            products.forEach(function (product) {
 
-    var products = window.products;
+                var $prod = $('<tr class="tr"></tr>');
+                var $id = $('<th class="th">' + product.id + '</th>');
+                var $nazwa = $('<td>' + product.nazwa + '</td>');
+                var $producent = $('<td>' + product.producent + '</td>');
+                var $cena = $('<td>' + product.cena + "zł" + '</td>');
+                var $button = $('<td class="btn btn-success">' + "Dodaj" + '</td>');
 
-    $(document).ready(function() {
+                $('.tabl').append($prod);
+                $prod.append($id);
+                $prod.append($nazwa);
+                $prod.append($producent);
+                $prod.append($cena);
+                $prod.append($button);
+            });
+            let sumaKoszyka = 0;
+            let cena = 0;
+            $('.tabl').on('click', '.btn', function () {
+                var id = $(this).parent().children(':first-child').text();
+                alert("dodano do koszyka produkt nr = " + id);
+                $(this).text("Dodaj ponownie");
 
-        products.forEach(function(product) {
+                var p = products.filter(function (element) {
+                    return element.ID == parseInt(id);
+                })[0];
+                // products.forEach(function(product) {
+                //     if (parseInt(id) == product.ID) {
+                //         cena = parseInt(product.cena);
+                //     }
+                // });
 
-            var $prod = $('<tr class="tr"></tr>');
-            var $id = $('<th class="th">' + product.ID + '</th>');
-            var $nazwa = $('<td>' + product.nazwa + '</td>');
-            var $producent = $('<td>' + product.producent + '</td>');
-            var $cena = $('<td>' + product.cena + "zł" + '</td>');
-            var $button = $('<td class="btn btn-success">' + "Dodaj" + '</td>');
+                var $prod = $('<tr class="tr"></tr>');
+                var $id = $('<th class="th">' + p.ID + '</th>');
+                var $nazwa = $('<td>' + p.nazwa + '</td>');
+                var $producent = $('<td>' + p.producent + '</td>');
+                var $cena = $('<td>' + p.cena + "zł" + '</td>');
+                var $button = $('<td class="btn btn-success">' + "Usuń" + '</td>');
 
-            $('.tabl').append($prod);
-            $prod.append($id);
-            $prod.append($nazwa);
-            $prod.append($producent);
-            $prod.append($cena);
-            $prod.append($button);
+                $('.tabelaZamowien').append($prod);
+                $prod.append($id);
+                $prod.append($nazwa);
+                $prod.append($producent);
+                $prod.append($cena);
+                $prod.append($button);
 
+                sumaKoszyka = sumaKoszyka + p.cena;
+                $('p').after().remove();
+                $('.footer-distributed').before('<p>Suma koszyka wynosi: ' + sumaKoszyka + '</p>');
 
-        });
-        let sumaKoszyka = 0;
-        let cena = 0;
-        $('.tabl').on('click', '.btn', function() {
-            var id = $(this).parent().children(':first-child').text();
-            alert("dodano do koszyka produkt nr = " + id);
-            $(this).text("Dodaj ponownie");
+            });
 
-            var p = products.filter(function(element) {
-                return element.ID == parseInt(id);
-            })[0];
-            // products.forEach(function(product) {
-            //     if (parseInt(id) == product.ID) {
-            //         cena = parseInt(product.cena);
-            //     }
-            // });
+            $('.tabelaZamowien').on('click', '.btn', function () {
+                var id = $(this).parent().children(':first-child').text();
+                alert("Usunieto z koszyka produkt nr = " + id);
 
-            var $prod = $('<tr class="tr"></tr>');
-            var $id = $('<th class="th">' + p.ID + '</th>');
-            var $nazwa = $('<td>' + p.nazwa + '</td>');
-            var $producent = $('<td>' + p.producent + '</td>');
-            var $cena = $('<td>' + p.cena + "zł" + '</td>');
-            var $button = $('<td class="btn btn-success">' + "Usuń" + '</td>');
+                var p = products.filter(function (element) {
+                    return element.ID == parseInt(id);
+                })[0];
 
-            $('.tabelaZamowien').append($prod);
-            $prod.append($id);
-            $prod.append($nazwa);
-            $prod.append($producent);
-            $prod.append($cena);
-            $prod.append($button);
+                $(this).parent().remove();
+                sumaKoszyka = sumaKoszyka - p.cena;
+                $('p').after().remove();
+                $('.footer-distributed').before('<p>Suma koszyka wynosi: ' + sumaKoszyka + '</p>');
 
-            sumaKoszyka = sumaKoszyka + p.cena;
-            $('p').after().remove();
-            $('.footer-distributed').before('<p>Suma koszyka wynosi: ' + sumaKoszyka + '</p>');
-
-        });
-
-        $('.tabelaZamowien').on('click', '.btn', function() {
-            var id = $(this).parent().children(':first-child').text();
-            alert("Usunieto z koszyka produkt nr = " + id);
-
-            var p = products.filter(function(element) {
-                return element.ID == parseInt(id);
-            })[0];
-
-            $(this).parent().remove();
-            sumaKoszyka = sumaKoszyka - p.cena;
-            $('p').after().remove();
-            $('.footer-distributed').before('<p>Suma koszyka wynosi: ' + sumaKoszyka + '</p>');
-
-
-
-        });
-
+            });
+        }
     });
-
-
-
-
 });

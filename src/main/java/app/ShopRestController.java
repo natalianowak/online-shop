@@ -14,6 +14,9 @@ public class ShopRestController {
 
     @RequestMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Product> products() {
-        return new ArrayList<>();
+        List<Product> result = new ArrayList<>();
+        result.add( new Product(1, "Okno balkonowe", "Oknoplast", 300));
+
+        return result;
     }
 }
